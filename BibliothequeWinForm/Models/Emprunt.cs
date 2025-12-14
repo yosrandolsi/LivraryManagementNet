@@ -1,0 +1,15 @@
+﻿using BibliothequeWinForm.Models;
+using System;
+
+public class Emprunt
+{
+    public int Id { get; set; }
+    public int LivreId { get; set; }
+    public int ClientId { get; set; }
+    public DateTime DateEmprunt { get; set; }
+    public DateTime? DateRetour { get; set; }
+
+    // Navigation properties
+    public virtual Livre Livre { get; set; }
+    public virtual Client Client { get; set; }
+}
