@@ -1,5 +1,8 @@
 ﻿using BibliothequeWinForm.Services;
 using System;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace BibliothequeWinForm.UI
@@ -12,74 +15,128 @@ namespace BibliothequeWinForm.UI
         {
             InitializeComponent();
             LoadLivres();
+            StyleDataGridView();
         }
 
+        // =========================
+        // CHARGEMENT DES LIVRES
+        // =========================
         private void LoadLivres()
         {
             dgvLivres.Columns.Clear();
             dgvLivres.AutoGenerateColumns = true;
             dgvLivres.DataSource = livreService.GetAllLivres();
 
-            // 🔹 Bouton Emprunter
-            DataGridViewButtonColumn btnEmprunter = new DataGridViewButtonColumn
-            {
-                Name = "Emprunter",
-                Text = "Emprunter",
-                UseColumnTextForButtonValue = true
-            };
-
-            // 🔹 Bouton Modifier
-            DataGridViewButtonColumn btnEdit = new DataGridViewButtonColumn
-            {
-                Name = "Modifier",
-                Text = "Modifier",
-                UseColumnTextForButtonValue = true
-            };
-
-            // 🔹 Bouton Supprimer
-            DataGridViewButtonColumn btnDelete = new DataGridViewButtonColumn
-            {
-                Name = "Supprimer",
-                Text = "Supprimer",
-                UseColumnTextForButtonValue = true
-            };
-
-            dgvLivres.Columns.Add(btnEmprunter);
-            dgvLivres.Columns.Add(btnEdit);
-            dgvLivres.Columns.Add(btnDelete);
+            AddButton("Emprunter", "📘 Emprunter", Color.FromArgb(135, 206, 235));
+            AddButton("Modifier", "✏️ Modifier", Color.FromArgb(255, 193, 7));
+            AddButton("Supprimer", "🗑 Supprimer", Color.FromArgb(220, 53, 69));
         }
 
-        private void BtnAjouter_Click(object sender, EventArgs e)
+        // =========================
+        // STYLE GLOBAL DU TABLEAU
+        // =========================
+        private void StyleDataGridView()
         {
-            FormAddLivre f = new FormAddLivre();
-            f.ShowDialog();
-            LoadLivres();
+            dgvLivres.BorderStyle = BorderStyle.None;
+            dgvLivres.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvLivres.GridColor = Color.FromArgb(230, 230, 230);
+
+            dgvLivres.BackgroundColor = Color.FromArgb(248, 244, 242);
+            dgvLivres.EnableHeadersVisualStyles = false;
+
+            dgvLivres.ColumnHeadersHeight = 42;
+            dgvLivres.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(173, 216, 230);
+            dgvLivres.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvLivres.ColumnHeadersDefaultCellStyle.Font =
+                new Font("Segoe UI", 11F, FontStyle.Bold);
+            dgvLivres.ColumnHeadersDefaultCellStyle.Alignment =
+                DataGridViewContentAlignment.MiddleCenter;
+
+            dgvLivres.DefaultCellStyle.Font =
+                new Font("Segoe UI", 10.5F);
+            dgvLivres.DefaultCellStyle.ForeColor = Color.FromArgb(60, 60, 60);
+            dgvLivres.DefaultCellStyle.SelectionBackColor =
+                Color.FromArgb(220, 235, 240);
+            dgvLivres.DefaultCellStyle.SelectionForeColor = Color.Black;
+
+            dgvLivres.AlternatingRowsDefaultCellStyle.BackColor =
+                Color.FromArgb(242, 236, 233);
+
+            dgvLivres.RowTemplate.Height = 40;
+            dgvLivres.RowHeadersVisible = false;
+            dgvLivres.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvLivres.MultiSelect = false;
+            dgvLivres.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            dgvLivres.CellClick += dgvLivres_CellClick;
         }
 
+        // =========================
+        // BOUTONS COLORÉS
+        // =========================
+        private void AddButton(string name, string text, Color color)
+        {
+            DataGridViewButtonColumn btn = new DataGridViewButtonColumn
+            {
+                Name = name,
+                Text = text,
+                UseColumnTextForButtonValue = true,
+                FlatStyle = FlatStyle.Flat
+            };
+            dgvLivres.Columns.Add(btn);
+
+            dgvLivres.CellPainting += (s, e) =>
+            {
+                if (e.RowIndex >= 0 && dgvLivres.Columns[e.ColumnIndex].Name == name)
+                {
+                    e.PaintBackground(e.CellBounds, true);
+
+                    Rectangle rect = new Rectangle(
+                        e.CellBounds.X + 6,
+                        e.CellBounds.Y + 6,
+                        e.CellBounds.Width - 12,
+                        e.CellBounds.Height - 12);
+
+                    using (GraphicsPath path = GetRoundedRect(rect, 12))
+                    using (SolidBrush brush = new SolidBrush(color))
+                    {
+                        e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                        e.Graphics.FillPath(brush, path);
+
+                        TextRenderer.DrawText(
+                            e.Graphics,
+                            text,
+                            new Font("Segoe UI", 9.5F, FontStyle.Bold),
+                            rect,
+                            Color.White,
+                            TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+                    }
+                    e.Handled = true;
+                }
+            };
+        }
+
+        // =========================
+        // GESTION DES CLICS
+        // =========================
         private void dgvLivres_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
 
-            int livreId = (int)dgvLivres.Rows[e.RowIndex].Cells["Id"].Value;
-            string columnName = dgvLivres.Columns[e.ColumnIndex].Name;
+            int livreId = Convert.ToInt32(dgvLivres.Rows[e.RowIndex].Cells["Id"].Value);
+            string col = dgvLivres.Columns[e.ColumnIndex].Name;
 
-            // 📘 EMPRUNTER
-            if (columnName == "Emprunter")
+            if (col == "Emprunter")
             {
-                FormEmprunt f = new FormEmprunt(livreId);
-                f.ShowDialog();
+                new FormEmprunt(livreId).ShowDialog();
                 LoadLivres();
             }
-
-            // ✏️ MODIFIER
-            if (columnName == "Modifier")
+            else if (col == "Modifier")
             {
                 new FormEditLivre(livreId).ShowDialog();
                 LoadLivres();
             }
-
-            // 🗑️ SUPPRIMER
-            if (columnName == "Supprimer")
+            else if (col == "Supprimer")
             {
                 if (MessageBox.Show("Supprimer ce livre ?", "Confirmation",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
@@ -90,8 +147,29 @@ namespace BibliothequeWinForm.UI
             }
         }
 
+        private void BtnAjouter_Click(object sender, EventArgs e)
+        {
+            new FormAddLivre().ShowDialog();
+            LoadLivres();
+        }
+
         private void FormLivres_Load(object sender, EventArgs e)
         {
+            dgvLivres.ClearSelection();
+        }
+
+        // =========================
+        // UTILS
+        // =========================
+        private GraphicsPath GetRoundedRect(Rectangle rect, int radius)
+        {
+            GraphicsPath path = new GraphicsPath();
+            path.AddArc(rect.X, rect.Y, radius, radius, 180, 90);
+            path.AddArc(rect.Right - radius, rect.Y, radius, radius, 270, 90);
+            path.AddArc(rect.Right - radius, rect.Bottom - radius, radius, radius, 0, 90);
+            path.AddArc(rect.X, rect.Bottom - radius, radius, radius, 90, 90);
+            path.CloseFigure();
+            return path;
         }
     }
 }
