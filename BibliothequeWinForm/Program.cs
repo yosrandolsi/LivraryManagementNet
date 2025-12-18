@@ -1,6 +1,7 @@
-﻿using System;
+﻿using BibliothequeWinForm.Data;
+using BibliothequeWinForm.UI;
+using System;
 using System.Windows.Forms;
-using BibliothequeWinForm.Data;
 
 namespace BibliothequeWinForm
 {
@@ -27,7 +28,7 @@ namespace BibliothequeWinForm
             }
 
             // Démarrage avec le menu principal
-            Application.Run(new FormMenu());
+            Application.Run(new FormConnexion());
         }
     }
 }

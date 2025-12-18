@@ -40,5 +40,21 @@ namespace BibliothequeWinForm.Services
                 context.SaveChanges();
             }
         }
+
+        public List<Auteur> SearchByNomOuPrenom(string keyword)
+        {
+            return context.Auteurs
+                .Where(a =>
+                    a.Nom.ToLower().Contains(keyword.ToLower()) ||
+                    a.Prenom.ToLower().Contains(keyword.ToLower()))
+                .ToList();
+        }
     }
 }
+
+
+
+
+
+
+

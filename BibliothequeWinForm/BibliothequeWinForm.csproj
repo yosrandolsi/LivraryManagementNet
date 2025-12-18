@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\BibliothequeContext.cs" />
+    <Compile Include="Models\Admin.cs" />
     <Compile Include="Models\Auteur.cs" />
     <Compile Include="Models\Categorie.cs" />
     <Compile Include="Models\Client.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Models\LivreViewModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AdminService.cs" />
     <Compile Include="Services\AuteurService.cs" />
     <Compile Include="Services\CategorieService.cs" />
     <Compile Include="Services\ClientService.cs" />
@@ -111,6 +113,24 @@
     </Compile>
     <Compile Include="UI\FormClients.Designer.cs">
       <DependentUpon>FormClients.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\FormConnexion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FormConnexion.Designer.cs">
+      <DependentUpon>FormConnexion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\FormDetailClient.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FormDetailClient.Designer.cs">
+      <DependentUpon>FormDetailClient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\FormDetailLivre.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FormDetailLivre.Designer.cs">
+      <DependentUpon>FormDetailLivre.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\FormEditAuteur.cs">
       <SubType>Form</SubType>
@@ -166,11 +186,11 @@
     <Compile Include="UI\FormMenu.Designer.cs">
       <DependentUpon>FormMenu.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\FormWelcome.cs">
+    <Compile Include="UI\FormRegister.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\FormWelcome.Designer.cs">
-      <DependentUpon>FormWelcome.cs</DependentUpon>
+    <Compile Include="UI\FormRegister.Designer.cs">
+      <DependentUpon>FormRegister.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -202,6 +222,15 @@
     <EmbeddedResource Include="UI\FormClients.resx">
       <DependentUpon>FormClients.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\FormConnexion.resx">
+      <DependentUpon>FormConnexion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\FormDetailClient.resx">
+      <DependentUpon>FormDetailClient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\FormDetailLivre.resx">
+      <DependentUpon>FormDetailLivre.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\FormEditAuteur.resx">
       <DependentUpon>FormEditAuteur.cs</DependentUpon>
     </EmbeddedResource>
@@ -226,8 +255,8 @@
     <EmbeddedResource Include="UI\FormMenu.resx">
       <DependentUpon>FormMenu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\FormWelcome.resx">
-      <DependentUpon>FormWelcome.cs</DependentUpon>
+    <EmbeddedResource Include="UI\FormRegister.resx">
+      <DependentUpon>FormRegister.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -247,6 +276,7 @@
     <Content Include="Assets\library.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\login.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

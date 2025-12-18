@@ -12,5 +12,6 @@ namespace BibliothequeWinForm.Data
         public DbSet<Categorie> Categories { get; set; }
         public DbSet<Emprunt> Emprunts { get; set; }
         public DbSet<Client> Clients { get; set; }
+        public DbSet<Admin> Admins { get; set; }
     }
 }

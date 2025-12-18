@@ -1,24 +1,23 @@
-﻿using System;
+﻿using BibliothequeWinForm.Models;
+using BibliothequeWinForm.Services;
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
 using System.Windows.Forms;
-using BibliothequeWinForm.Data;
-using BibliothequeWinForm.Models;
 
 namespace BibliothequeWinForm.UI
 {
-    public partial class FormEmprunt : Form
+    public partial class FormRegister : Form
     {
-        private int livreId;
-        private BibliothequeContext db = new BibliothequeContext();
+        private readonly AdminService adminService = new AdminService();
 
-        public FormEmprunt(int livreId)
+        public FormRegister()
         {
             InitializeComponent();
-            this.livreId = livreId;
+            this.StartPosition = FormStartPosition.CenterScreen;
             SetupVisualEffects();
             ApplyRoundedCorners();
+            LoadImage();
         }
 
         private void SetupVisualEffects()
@@ -34,9 +33,6 @@ namespace BibliothequeWinForm.UI
 
             // Appliquer les effets aux champs
             SetupControlEffects();
-
-            // Style du DataGridView
-            SetupDataGridViewStyle();
         }
 
         private void ApplyRoundedFormCorners(int radius)
@@ -52,12 +48,11 @@ namespace BibliothequeWinForm.UI
 
         private void ApplyRoundedCorners()
         {
-            ApplyRoundedControl(cmbClients, 15);
-            ApplyRoundedControl(txtLivre, 15);
-            ApplyRoundedControl(dtRetour, 15);
-            ApplyRoundedControl(btnEmprunter, 20);
-            ApplyRoundedControl(btnRetour, 20);
-            ApplyRoundedControl(dgvEmprunts, 15);
+            ApplyRoundedControl(txtUsername, 15);
+            ApplyRoundedControl(txtPassword, 15);
+            ApplyRoundedControl(txtEmail, 15);
+            ApplyRoundedControl(btnSave, 20);
+            ApplyRoundedControl(btnBack, 20);
         }
 
         private void ApplyRoundedControl(Control control, int radius)
@@ -71,7 +66,7 @@ namespace BibliothequeWinForm.UI
             path.AddArc(0, control.Height - radius, radius, radius, 90, 90);
             path.CloseAllFigures();
 
-            if (control is TextBox || control is ComboBox || control is DateTimePicker)
+            if (control is TextBox)
             {
                 control.Region = new Region(path);
             }
@@ -79,7 +74,7 @@ namespace BibliothequeWinForm.UI
 
         private void SetupButtonEffects()
         {
-            Button[] buttons = { btnEmprunter, btnRetour };
+            Button[] buttons = { btnSave, btnBack };
 
             foreach (Button btn in buttons)
             {
@@ -88,13 +83,13 @@ namespace BibliothequeWinForm.UI
                 btn.Font = new Font("Segoe UI", 11, FontStyle.Bold);
                 btn.ForeColor = Color.White;
 
-                if (btn == btnEmprunter)
+                if (btn == btnSave)
                 {
                     btn.BackColor = Color.FromArgb(200, 144, 238, 144); // pastel vert
                 }
                 else
                 {
-                    btn.BackColor = Color.FromArgb(200, 178, 214, 255); // pastel bleu
+                    btn.BackColor = Color.FromArgb(200, 255, 182, 193); // pastel rose
                 }
 
                 btn.Paint += (sender, e) =>
@@ -135,13 +130,13 @@ namespace BibliothequeWinForm.UI
                 btn.MouseLeave += (sender, e) =>
                 {
                     Button button = (Button)sender;
-                    if (button == btnEmprunter)
+                    if (button == btnSave)
                     {
                         button.BackColor = Color.FromArgb(200, 144, 238, 144);
                     }
                     else
                     {
-                        button.BackColor = Color.FromArgb(200, 178, 214, 255);
+                        button.BackColor = Color.FromArgb(200, 255, 182, 193);
                     }
                 };
 
@@ -167,56 +162,25 @@ namespace BibliothequeWinForm.UI
         private void SetupControlEffects()
         {
             // Style des labels
-            Label[] labels = { lblClient, lblLivre, lblDateRetour };
+            Label[] labels = { lblUsername, lblPassword, lblEmail };
             foreach (Label lbl in labels)
             {
                 lbl.Font = new Font("Segoe UI Semibold", 11);
                 lbl.ForeColor = Color.FromArgb(100, 80, 80, 80);
             }
 
-            // Style des ComboBox
-            cmbClients.Font = new Font("Segoe UI", 11);
-            cmbClients.BackColor = Color.White;
-            cmbClients.ForeColor = Color.FromArgb(64, 64, 64);
-
             // Style des TextBox
-            txtLivre.Font = new Font("Segoe UI", 11);
-            txtLivre.BackColor = Color.White;
-            txtLivre.ForeColor = Color.FromArgb(64, 64, 64);
+            txtUsername.Font = new Font("Segoe UI", 11);
+            txtUsername.BackColor = Color.White;
+            txtUsername.ForeColor = Color.FromArgb(64, 64, 64);
 
-            // Style des DateTimePicker
-            dtRetour.Font = new Font("Segoe UI", 11);
-            dtRetour.CalendarMonthBackground = Color.White;
-            dtRetour.CalendarTitleBackColor = Color.FromArgb(200, 178, 214, 255);
-            dtRetour.CalendarTitleForeColor = Color.White;
-        }
+            txtPassword.Font = new Font("Segoe UI", 11);
+            txtPassword.BackColor = Color.White;
+            txtPassword.ForeColor = Color.FromArgb(64, 64, 64);
 
-        private void SetupDataGridViewStyle()
-        {
-            dgvEmprunts.BackgroundColor = Color.FromArgb(255, 250, 245, 240);
-            dgvEmprunts.BorderStyle = BorderStyle.None;
-            dgvEmprunts.Font = new Font("Segoe UI", 10);
-            dgvEmprunts.ForeColor = Color.FromArgb(64, 64, 64);
-            dgvEmprunts.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(200, 180, 167, 210);
-            dgvEmprunts.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgvEmprunts.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI Semibold", 11);
-            dgvEmprunts.EnableHeadersVisualStyles = false;
-            dgvEmprunts.RowHeadersVisible = false;
-            dgvEmprunts.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvEmprunts.RowTemplate.Height = 35;
-
-            dgvEmprunts.Paint += (sender, e) =>
-            {
-                DataGridView dgv = (DataGridView)sender;
-                using (LinearGradientBrush brush = new LinearGradientBrush(
-                    dgv.ClientRectangle,
-                    Color.FromArgb(255, 250, 245, 240),
-                    Color.FromArgb(255, 245, 235, 230),
-                    45F))
-                {
-                    e.Graphics.FillRectangle(brush, dgv.ClientRectangle);
-                }
-            };
+            txtEmail.Font = new Font("Segoe UI", 11);
+            txtEmail.BackColor = Color.White;
+            txtEmail.ForeColor = Color.FromArgb(64, 64, 64);
         }
 
         private GraphicsPath CreateRoundedPath(Rectangle rect, int radius)
@@ -230,100 +194,117 @@ namespace BibliothequeWinForm.UI
             return path;
         }
 
-        private void LoadLivre()
+        private void LoadImage()
         {
-            var livre = db.Livres.Find(livreId);
-            if (livre != null)
+            try
             {
-                txtLivre.Text = livre.Titre;
+                // Chemin vers l'image de bibliothèque
+                string imagePath = @"D:\2eme_ing\.NET\BibliothequeWinForm\BibliothequeWinForm\Assets\login.png";
+
+                if (System.IO.File.Exists(imagePath))
+                {
+                    Image originalImage = Image.FromFile(imagePath);
+                    pictureBoxRegister.Image = originalImage;
+                    pictureBoxRegister.SizeMode = PictureBoxSizeMode.Zoom;
+
+                    // Appliquer des coins arrondis à l'image
+                    ApplyRoundedPictureBox();
+                }
+                else
+                {
+                    CreateFallbackImage();
+                }
+            }
+            catch (Exception ex)
+            {
+                CreateFallbackImage();
+                MessageBox.Show($"Impossible de charger l'image: {ex.Message}", "Information",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
-        private void LoadClients()
+        private void ApplyRoundedPictureBox()
         {
-            cmbClients.DataSource = db.Clients.ToList();
-            cmbClients.DisplayMember = "Nom";
-            cmbClients.ValueMember = "Id";
+            GraphicsPath path = new GraphicsPath();
+            int radius = 20;
+            path.AddArc(0, 0, radius, radius, 180, 90);
+            path.AddArc(pictureBoxRegister.Width - radius, 0, radius, radius, 270, 90);
+            path.AddArc(pictureBoxRegister.Width - radius, pictureBoxRegister.Height - radius, radius, radius, 0, 90);
+            path.AddArc(0, pictureBoxRegister.Height - radius, radius, radius, 90, 90);
+            path.CloseAllFigures();
+            pictureBoxRegister.Region = new Region(path);
         }
 
-        private void LoadEmprunts()
+        private void CreateFallbackImage()
         {
-            dgvEmprunts.DataSource = db.Emprunts
-                .Where(e => e.LivreId == livreId && e.DateRetour == null)
-                .Select(e => new
-                {
-                    e.Id,
-                    Client = e.Client.Nom + " " + e.Client.Prenom,
-                    e.DateEmprunt,
-                    DateRetourPrevue = e.DateRetour
-                })
-                .ToList();
-        }
+            Bitmap fallback = new Bitmap(pictureBoxRegister.Width, pictureBoxRegister.Height);
 
-        private void btnEmprunter_Click(object sender, EventArgs e)
-        {
-            if (cmbClients.SelectedItem is Client client)
+            using (Graphics g = Graphics.FromImage(fallback))
             {
-                var livre = db.Livres.Find(livreId);
+                g.SmoothingMode = SmoothingMode.AntiAlias;
 
-                if (livre.ExemplairesDisponibles <= 0)
+                using (LinearGradientBrush bgBrush = new LinearGradientBrush(
+                    new Rectangle(0, 0, fallback.Width, fallback.Height),
+                    Color.FromArgb(255, 245, 235, 230),
+                    Color.FromArgb(255, 235, 225, 220),
+                    45F))
                 {
-                    MessageBox.Show("Livre non disponible !", "Information",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
+                    g.FillRectangle(bgBrush, 0, 0, fallback.Width, fallback.Height);
                 }
 
-                Emprunt emprunt = new Emprunt
+                using (Font font = new Font("Segoe UI", 16, FontStyle.Bold))
+                using (SolidBrush textBrush = new SolidBrush(Color.FromArgb(120, 80, 80, 80)))
                 {
-                    LivreId = livreId,
-                    ClientId = client.Id,
-                    DateEmprunt = DateTime.Now,
-                    DateRetour = dtRetour.Value
-                };
-
-                db.Emprunts.Add(emprunt);
-                livre.ExemplairesDisponibles--;
-
-                db.SaveChanges();
-
-                MessageBox.Show("Livre emprunté avec succès !", "Succès",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadEmprunts();
+                    string text = "📝 Inscription";
+                    SizeF textSize = g.MeasureString(text, font);
+                    g.DrawString(text, font, textBrush,
+                        (fallback.Width - textSize.Width) / 2,
+                        (fallback.Height - textSize.Height) / 2);
+                }
             }
+
+            pictureBoxRegister.Image = fallback;
+            pictureBoxRegister.SizeMode = PictureBoxSizeMode.Zoom;
         }
 
-        private void btnRetour_Click(object sender, EventArgs e)
+        private void btnSave_Click(object sender, EventArgs e)
         {
-            if (dgvEmprunts.SelectedRows.Count == 0)
+            if (string.IsNullOrWhiteSpace(txtUsername.Text) ||
+                string.IsNullOrWhiteSpace(txtPassword.Text) ||
+                string.IsNullOrWhiteSpace(txtEmail.Text))
             {
-                this.Close();
+                MessageBox.Show("Veuillez remplir tous les champs.", "Validation",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            int empruntId = (int)dgvEmprunts.SelectedRows[0].Cells["Id"].Value;
-            var emprunt = db.Emprunts.Find(empruntId);
-
-            if (emprunt != null)
+            Admin admin = new Admin
             {
-                emprunt.DateRetour = DateTime.Now;
+                Username = txtUsername.Text.Trim(),
+                Password = txtPassword.Text,
+                Email = txtEmail.Text.Trim()
+            };
 
-                var livre = db.Livres.Find(emprunt.LivreId);
-                livre.ExemplairesDisponibles++;
+            adminService.AddAdmin(admin);
+            MessageBox.Show("Admin créé avec succès !", "Succès",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                db.SaveChanges();
-
-                MessageBox.Show("Livre retourné avec succès !", "Succès",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close();
-            }
+            // Retour à la connexion
+            FormConnexion connexionForm = new FormConnexion();
+            connexionForm.Show();
+            this.Close();
         }
 
-        private void FormEmprunt_Load(object sender, EventArgs e)
+        private void btnBack_Click(object sender, EventArgs e)
         {
-            dtRetour.MinDate = DateTime.Now.AddDays(1);
-            LoadLivre();
-            LoadClients();
-            LoadEmprunts();
+            FormConnexion connexionForm = new FormConnexion();
+            connexionForm.Show();
+            this.Close();
+        }
+
+        private void FormRegister_Load(object sender, EventArgs e)
+        {
+
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -363,5 +344,10 @@ namespace BibliothequeWinForm.UI
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern bool ReleaseCapture();
+
+        private void panelForm_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

@@ -88,8 +88,7 @@ namespace BibliothequeWinForm.UI
 
             dgvCategories.CellPainting += (s, e) =>
             {
-                if (e.RowIndex >= 0 &&
-                    dgvCategories.Columns[e.ColumnIndex].Name == name)
+                if (e.RowIndex >= 0 && dgvCategories.Columns[e.ColumnIndex].Name == name)
                 {
                     e.PaintBackground(e.CellBounds, true);
 
@@ -120,15 +119,13 @@ namespace BibliothequeWinForm.UI
         }
 
         // =========================
-        // ACTIONS
+        // ACTIONS SUR BOUTONS
         // =========================
         private void dgvCategories_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
 
-            int catId = Convert.ToInt32(
-                dgvCategories.Rows[e.RowIndex].Cells["Id"].Value);
-
+            int catId = Convert.ToInt32(dgvCategories.Rows[e.RowIndex].Cells["Id"].Value);
             string col = dgvCategories.Columns[e.ColumnIndex].Name;
 
             if (col == "Modifier")
@@ -138,10 +135,8 @@ namespace BibliothequeWinForm.UI
             }
             else if (col == "Supprimer")
             {
-                if (MessageBox.Show("Supprimer cette catégorie ?",
-                    "Confirmation",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Warning) == DialogResult.Yes)
+                if (MessageBox.Show("Supprimer cette catégorie ?", "Confirmation",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     categorieService.DeleteCategorie(catId);
                     LoadCategories();
@@ -153,6 +148,13 @@ namespace BibliothequeWinForm.UI
         {
             new FormAddCategorie().ShowDialog();
             LoadCategories();
+        }
+
+        private void BtnRetour_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            FormMenu menu = new FormMenu();
+            menu.Show();
         }
 
         private void FormCategories_Load(object sender, EventArgs e)
@@ -172,6 +174,11 @@ namespace BibliothequeWinForm.UI
             path.AddArc(rect.X, rect.Bottom - radius, radius, radius, 90, 90);
             path.CloseFigure();
             return path;
+        }
+
+        private void panelContainer_Paint(object sender, PaintEventArgs e)
+        {
+            // Optionnel : fond custom
         }
     }
 }

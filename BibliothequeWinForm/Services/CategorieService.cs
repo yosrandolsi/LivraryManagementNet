@@ -16,7 +16,7 @@ namespace BibliothequeWinForm.Services
         }
 
         public List<Categorie> GetAllCategories()
-        {
+           {
             return context.Categories.ToList();
         }
 
