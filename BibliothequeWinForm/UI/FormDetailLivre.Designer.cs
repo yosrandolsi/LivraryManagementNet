@@ -1,79 +1,142 @@
-﻿using System.Windows.Forms;
-
-namespace BibliothequeWinForm.UI
+﻿namespace BibliothequeWinForm.UI
 {
     partial class FormDetailLivre
     {
         private System.ComponentModel.IContainer components = null;
-        private Label lblTitre;
-        private Label lblAuteur;
-        private Label lblCategorie;
-        private Label lblExemplaires;
-        private Button btnClose;
 
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
+            {
                 components.Dispose();
+            }
             base.Dispose(disposing);
         }
 
+        #region Code généré par le Concepteur Windows Forms
+
         private void InitializeComponent()
         {
-            this.lblTitre = new Label();
-            this.lblAuteur = new Label();
-            this.lblCategorie = new Label();
-            this.lblExemplaires = new Label();
-            this.btnClose = new Button();
+            this.lblTitreLabel = new System.Windows.Forms.Label();
+            this.lblAuteurLabel = new System.Windows.Forms.Label();
+            this.lblCategorieLabel = new System.Windows.Forms.Label();
+            this.lblExemplairesLabel = new System.Windows.Forms.Label();
+
+            this.lblTitre = new System.Windows.Forms.Label();
+            this.lblAuteur = new System.Windows.Forms.Label();
+            this.lblCategorie = new System.Windows.Forms.Label();
+            this.lblExemplaires = new System.Windows.Forms.Label();
+
+            this.txtDescription = new System.Windows.Forms.TextBox();
+            this.btnFermer = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // lblTitre
-            // 
-            this.lblTitre.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.lblTitre.Location = new System.Drawing.Point(20, 20);
-            this.lblTitre.Size = new System.Drawing.Size(400, 25);
-            // 
-            // lblAuteur
-            // 
-            this.lblAuteur.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.lblAuteur.Location = new System.Drawing.Point(20, 60);
-            this.lblAuteur.Size = new System.Drawing.Size(400, 25);
-            // 
-            // lblCategorie
-            // 
-            this.lblCategorie.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.lblCategorie.Location = new System.Drawing.Point(20, 100);
-            this.lblCategorie.Size = new System.Drawing.Size(400, 25);
-            // 
-            // lblExemplaires
-            // 
-            this.lblExemplaires.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.lblExemplaires.Location = new System.Drawing.Point(20, 140);
-            this.lblExemplaires.Size = new System.Drawing.Size(400, 25);
-            // 
-            // btnClose
-            // 
-            this.btnClose.Text = "Fermer";
-            this.btnClose.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnClose.BackColor = System.Drawing.Color.FromArgb(220, 53, 69);
-            this.btnClose.ForeColor = System.Drawing.Color.White;
-            this.btnClose.FlatStyle = FlatStyle.Flat;
-            this.btnClose.Location = new System.Drawing.Point(150, 200);
-            this.btnClose.Size = new System.Drawing.Size(120, 40);
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
-            // 
+
+            // ========================
             // FormDetailLivre
-            // 
-            this.ClientSize = new System.Drawing.Size(450, 270);
+            // ========================
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(600, 420);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Détails du livre";
+
+            // ========================
+            // Labels fixes
+            // ========================
+            this.lblTitreLabel.Text = "Titre :";
+            this.lblTitreLabel.Location = new System.Drawing.Point(30, 30);
+            this.lblTitreLabel.AutoSize = true;
+            this.lblTitreLabel.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+
+            this.lblAuteurLabel.Text = "Auteur :";
+            this.lblAuteurLabel.Location = new System.Drawing.Point(30, 70);
+            this.lblAuteurLabel.AutoSize = true;
+            this.lblAuteurLabel.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+
+            this.lblCategorieLabel.Text = "Catégorie :";
+            this.lblCategorieLabel.Location = new System.Drawing.Point(30, 110);
+            this.lblCategorieLabel.AutoSize = true;
+            this.lblCategorieLabel.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+
+            this.lblExemplairesLabel.Text = "Exemplaires disponibles :";
+            this.lblExemplairesLabel.Location = new System.Drawing.Point(30, 150);
+            this.lblExemplairesLabel.AutoSize = true;
+            this.lblExemplairesLabel.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+
+            // ========================
+            // Labels dynamiques
+            // ========================
+            this.lblTitre.Location = new System.Drawing.Point(220, 30);
+            this.lblTitre.AutoSize = true;
+            this.lblTitre.Font = new System.Drawing.Font("Segoe UI", 10F);
+
+            this.lblAuteur.Location = new System.Drawing.Point(220, 70);
+            this.lblAuteur.AutoSize = true;
+            this.lblAuteur.Font = new System.Drawing.Font("Segoe UI", 10F);
+
+            this.lblCategorie.Location = new System.Drawing.Point(220, 110);
+            this.lblCategorie.AutoSize = true;
+            this.lblCategorie.Font = new System.Drawing.Font("Segoe UI", 10F);
+
+            this.lblExemplaires.Location = new System.Drawing.Point(260, 150);
+            this.lblExemplaires.AutoSize = true;
+            this.lblExemplaires.Font = new System.Drawing.Font("Segoe UI", 10F);
+
+            // ========================
+            // Description
+            // ========================
+            this.txtDescription.Location = new System.Drawing.Point(34, 190);
+            this.txtDescription.Multiline = true;
+            this.txtDescription.ReadOnly = true;
+            this.txtDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtDescription.Size = new System.Drawing.Size(520, 150);
+            this.txtDescription.Font = new System.Drawing.Font("Segoe UI", 10F);
+
+            // ========================
+            // Bouton Fermer
+            // ========================
+            this.btnFermer.Text = "Fermer";
+            this.btnFermer.Location = new System.Drawing.Point(460, 350);
+            this.btnFermer.Size = new System.Drawing.Size(95, 35);
+            this.btnFermer.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnFermer.Click += new System.EventHandler(this.btnFermer_Click);
+
+            // ========================
+            // Controls
+            // ========================
+            this.Controls.Add(this.lblTitreLabel);
+            this.Controls.Add(this.lblAuteurLabel);
+            this.Controls.Add(this.lblCategorieLabel);
+            this.Controls.Add(this.lblExemplairesLabel);
+
             this.Controls.Add(this.lblTitre);
             this.Controls.Add(this.lblAuteur);
             this.Controls.Add(this.lblCategorie);
             this.Controls.Add(this.lblExemplaires);
-            this.Controls.Add(this.btnClose);
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.StartPosition = FormStartPosition.CenterScreen;
-            this.Text = "Détails du Livre";
+
+            this.Controls.Add(this.txtDescription);
+            this.Controls.Add(this.btnFermer);
+
             this.ResumeLayout(false);
+            this.PerformLayout();
         }
+
+        #endregion
+
+        private System.Windows.Forms.Label lblTitreLabel;
+        private System.Windows.Forms.Label lblAuteurLabel;
+        private System.Windows.Forms.Label lblCategorieLabel;
+        private System.Windows.Forms.Label lblExemplairesLabel;
+
+        private System.Windows.Forms.Label lblTitre;
+        private System.Windows.Forms.Label lblAuteur;
+        private System.Windows.Forms.Label lblCategorie;
+        private System.Windows.Forms.Label lblExemplaires;
+
+        private System.Windows.Forms.TextBox txtDescription;
+        private System.Windows.Forms.Button btnFermer;
     }
 }

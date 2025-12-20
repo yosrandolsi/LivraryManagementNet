@@ -341,5 +341,10 @@ namespace BibliothequeWinForm.UI
         {
 
         }
+
+        private void lblUsername_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

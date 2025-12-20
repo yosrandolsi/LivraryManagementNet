@@ -247,7 +247,7 @@ namespace BibliothequeWinForm
             this.lblLibraryName.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             this.lblLibraryName.ForeColor = Color.FromArgb(100, 100, 100);
             this.lblLibraryName.Location = new System.Drawing.Point(40, 600);
-            this.lblLibraryName.Text = "Bibliothèque Municipale © 2024";
+            this.lblLibraryName.Text = "Bibliothèque Municipale";
             // 
             // panelDecoration1
             // 

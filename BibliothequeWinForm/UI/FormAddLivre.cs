@@ -16,51 +16,34 @@ namespace BibliothequeWinForm.UI
         public FormAddLivre()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
             livreService = new LivreService();
             auteurService = new AuteurService();
             categorieService = new CategorieService();
+            this.Load += FormAddLivre_Load;
+        }
+
+        private void FormAddLivre_Load(object sender, EventArgs e)
+        {
+            // Appliquer les coins arrondis
+            ApplyRoundedCorners(panelContainer, 25);
+            ApplyRoundedCorners(panelTitle, 15);
+            ApplyRoundedCorners(panelForm, 15);
+            ApplyRoundedCorners(btnEnregistrer, 15);
+            ApplyRoundedCorners(btnAnnuler, 15);
+            ApplyRoundedCorners(txtTitre, 10);
+            ApplyRoundedCorners(cmbAuteurs, 10);
+            ApplyRoundedCorners(cmbCategories, 10);
+            ApplyRoundedCorners(numExemplaires, 10);
+
+            // Appliquer les effets visuels
             SetupVisualEffects();
-            ApplyRoundedCorners();
+
+            // Charger les données
             LoadComboBoxes();
         }
 
-        private void SetupVisualEffects()
-        {
-            // Style du formulaire
-            this.BackColor = Color.FromArgb(255, 245, 235, 230);
-
-            // Arrondir les bords du formulaire
-            ApplyRoundedFormCorners(30);
-
-            // Appliquer les effets aux boutons
-            SetupButtonEffects();
-
-            // Appliquer les effets aux champs
-            SetupControlEffects();
-        }
-
-        private void ApplyRoundedFormCorners(int radius)
-        {
-            GraphicsPath path = new GraphicsPath();
-            path.AddArc(0, 0, radius, radius, 180, 90);
-            path.AddArc(this.Width - radius, 0, radius, radius, 270, 90);
-            path.AddArc(this.Width - radius, this.Height - radius, radius, radius, 0, 90);
-            path.AddArc(0, this.Height - radius, radius, radius, 90, 90);
-            path.CloseAllFigures();
-            this.Region = new Region(path);
-        }
-
-        private void ApplyRoundedCorners()
-        {
-            ApplyRoundedControl(txtTitre, 15);
-            ApplyRoundedControl(cmbAuteurs, 15);
-            ApplyRoundedControl(cmbCategories, 15);
-            ApplyRoundedControl(numExemplaires, 15);
-            ApplyRoundedControl(btnEnregistrer, 20);
-            ApplyRoundedControl(btnAnnuler, 20);
-        }
-
-        private void ApplyRoundedControl(Control control, int radius)
+        private void ApplyRoundedCorners(Control control, int radius)
         {
             if (control == null) return;
 
@@ -70,50 +53,130 @@ namespace BibliothequeWinForm.UI
             path.AddArc(control.Width - radius, control.Height - radius, radius, radius, 0, 90);
             path.AddArc(0, control.Height - radius, radius, radius, 90, 90);
             path.CloseAllFigures();
+            control.Region = new Region(path);
+        }
 
-            if (control is TextBox || control is ComboBox || control is NumericUpDown)
+        private void SetupVisualEffects()
+        {
+            // Fond dégradé du conteneur principal
+            panelContainer.Paint += (sender, e) =>
             {
-                control.Region = new Region(path);
+                using (LinearGradientBrush brush = new LinearGradientBrush(
+                    panelContainer.ClientRectangle,
+                    Color.FromArgb(255, 239, 228, 225),  // Couleur pastel claire
+                    Color.FromArgb(255, 245, 235, 230),  // Couleur pastel plus claire
+                    45F))
+                {
+                    e.Graphics.FillRectangle(brush, panelContainer.ClientRectangle);
+                }
+
+                // Bordure subtile
+                using (Pen borderPen = new Pen(Color.FromArgb(180, 210, 210, 210), 1))
+                {
+                    Rectangle borderRect = new Rectangle(0, 0, panelContainer.Width - 1, panelContainer.Height - 1);
+                    e.Graphics.DrawRectangle(borderPen, borderRect);
+                }
+            };
+
+            // Style du panel de formulaire
+            panelForm.Paint += (sender, e) =>
+            {
+                using (SolidBrush brush = new SolidBrush(Color.FromArgb(240, 255, 255, 255)))
+                {
+                    e.Graphics.FillRectangle(brush, panelForm.ClientRectangle);
+                }
+
+                // Bordure verte subtile
+                using (Pen borderPen = new Pen(Color.FromArgb(180, 144, 238, 144), 2))
+                {
+                    Rectangle rect = new Rectangle(0, 0, panelForm.Width - 1, panelForm.Height - 1);
+                    e.Graphics.DrawRectangle(borderPen, rect);
+                }
+            };
+
+            // Style de l'en-tête (vert pastel)
+            panelTitle.Paint += (sender, e) =>
+            {
+                using (LinearGradientBrush brush = new LinearGradientBrush(
+                    panelTitle.ClientRectangle,
+                    Color.FromArgb(255, 144, 238, 144),  // Vert clair pastel
+                    Color.FromArgb(255, 152, 251, 152),  // Vert pastel
+                    90F))
+                {
+                    e.Graphics.FillRectangle(brush, panelTitle.ClientRectangle);
+                }
+            };
+
+            // Effets sur les boutons
+            AddButtonEffects(btnEnregistrer, btnAnnuler);
+
+            // Style des zones de saisie
+            SetupControlEffects(txtTitre);
+            SetupControlEffects(cmbAuteurs);
+            SetupControlEffects(cmbCategories);
+            SetupControlEffects(numExemplaires);
+        }
+
+        private void SetupControlEffects(Control control)
+        {
+            if (control is TextBox || control is ComboBox)
+            {
+                control.BackColor = Color.White;
+                control.Font = new Font("Segoe UI", 11F);
+                control.ForeColor = Color.FromArgb(80, 80, 80);
+
+                if (control is TextBox)
+                {
+                    ((TextBox)control).BorderStyle = BorderStyle.None;
+                }
+
+                control.Paint += (sender, e) =>
+                {
+                    using (Pen borderPen = new Pen(Color.FromArgb(200, 144, 238, 144), 2))
+                    {
+                        Rectangle rect = new Rectangle(0, 0, control.Width - 1, control.Height - 1);
+                        e.Graphics.DrawRectangle(borderPen, rect);
+                    }
+                };
+            }
+            else if (control is NumericUpDown)
+            {
+                control.BackColor = Color.White;
+                control.Font = new Font("Segoe UI", 11F);
+                control.ForeColor = Color.FromArgb(80, 80, 80);
+
+                control.Paint += (sender, e) =>
+                {
+                    using (Pen borderPen = new Pen(Color.FromArgb(200, 144, 238, 144), 2))
+                    {
+                        Rectangle rect = new Rectangle(0, 0, control.Width - 1, control.Height - 1);
+                        e.Graphics.DrawRectangle(borderPen, rect);
+                    }
+                };
             }
         }
 
-        private void SetupButtonEffects()
+        private void AddButtonEffects(params Button[] buttons)
         {
-            Button[] buttons = { btnEnregistrer, btnAnnuler };
-
-            foreach (Button btn in buttons)
+            foreach (Button button in buttons)
             {
-                btn.FlatAppearance.BorderSize = 0;
-                btn.FlatStyle = FlatStyle.Flat;
-                btn.Font = new Font("Segoe UI", 11, FontStyle.Bold);
-                btn.ForeColor = Color.White;
-
-                if (btn == btnEnregistrer)
+                button.Paint += (sender, e) =>
                 {
-                    btn.BackColor = Color.FromArgb(200, 144, 238, 144); // pastel vert
-                }
-                else
-                {
-                    btn.BackColor = Color.FromArgb(200, 255, 182, 193); // pastel rose
-                }
-
-                btn.Paint += (sender, e) =>
-                {
-                    Button button = (Button)sender;
-                    if (button.Enabled)
+                    Button btn = (Button)sender;
+                    if (btn.Enabled)
                     {
-                        using (GraphicsPath path = CreateRoundedPath(button.ClientRectangle, 20))
+                        using (GraphicsPath path = CreateRoundedPath(btn.ClientRectangle, 15))
                         {
                             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
                             // Ombre
-                            using (Pen shadowPen = new Pen(Color.FromArgb(40, 0, 0, 0), 3))
+                            using (Pen shadowPen = new Pen(Color.FromArgb(40, 0, 0, 0), 2))
                             {
                                 e.Graphics.DrawPath(shadowPen, path);
                             }
 
                             // Surbrillance
-                            RectangleF highlightRect = new RectangleF(5, 5, button.Width - 10, 15);
+                            RectangleF highlightRect = new RectangleF(3, 3, btn.Width - 6, 12);
                             using (LinearGradientBrush highlightBrush = new LinearGradientBrush(
                                 highlightRect,
                                 Color.FromArgb(60, 255, 255, 255),
@@ -126,72 +189,37 @@ namespace BibliothequeWinForm.UI
                     }
                 };
 
-                btn.MouseEnter += (sender, e) =>
+                // Effets hover
+                button.MouseEnter += (s, e) =>
                 {
-                    Button button = (Button)sender;
                     button.BackColor = Color.FromArgb(220, button.BackColor.R, button.BackColor.G, button.BackColor.B);
                 };
-
-                btn.MouseLeave += (sender, e) =>
+                button.MouseLeave += (s, e) =>
                 {
-                    Button button = (Button)sender;
-                    if (button == btnEnregistrer)
-                    {
-                        button.BackColor = Color.FromArgb(200, 144, 238, 144);
-                    }
-                    else
-                    {
-                        button.BackColor = Color.FromArgb(200, 255, 182, 193);
-                    }
+                    if (button.Name == "btnEnregistrer")
+                        button.BackColor = Color.FromArgb(200, 144, 238, 144); // Vert pastel
+                    else if (button.Name == "btnAnnuler")
+                        button.BackColor = Color.FromArgb(200, 255, 182, 193); // Rose pastel
                 };
 
-                btn.Click += (sender, e) =>
+                // Effet click
+                button.Click += (s, e) =>
                 {
-                    Button button = (Button)sender;
-                    Color originalColor = button.BackColor;
-                    button.BackColor = Color.FromArgb(180, button.BackColor.R, button.BackColor.G, button.BackColor.B);
+                    Button btn = (Button)s;
+                    Color originalColor = btn.BackColor;
+                    btn.BackColor = Color.FromArgb(180, btn.BackColor.R, btn.BackColor.G, btn.BackColor.B);
 
                     Timer timer = new Timer();
                     timer.Interval = 150;
-                    timer.Tick += (s, ev) =>
+                    timer.Tick += (timerS, timerE) =>
                     {
-                        button.BackColor = originalColor;
+                        btn.BackColor = originalColor;
                         timer.Stop();
                         timer.Dispose();
                     };
                     timer.Start();
                 };
             }
-        }
-
-        private void SetupControlEffects()
-        {
-            // Style des labels
-            Label[] labels = { lblTitre, lblAuteur, lblCategorie, lblExemplaires };
-            foreach (Label lbl in labels)
-            {
-                lbl.Font = new Font("Segoe UI Semibold", 11);
-                lbl.ForeColor = Color.FromArgb(100, 80, 80, 80);
-            }
-
-            // Style des ComboBox
-            cmbAuteurs.Font = new Font("Segoe UI", 11);
-            cmbAuteurs.BackColor = Color.White;
-            cmbAuteurs.ForeColor = Color.FromArgb(64, 64, 64);
-
-            cmbCategories.Font = new Font("Segoe UI", 11);
-            cmbCategories.BackColor = Color.White;
-            cmbCategories.ForeColor = Color.FromArgb(64, 64, 64);
-
-            // Style des TextBox
-            txtTitre.Font = new Font("Segoe UI", 11);
-            txtTitre.BackColor = Color.White;
-            txtTitre.ForeColor = Color.FromArgb(64, 64, 64);
-
-            // Style des NumericUpDown
-            numExemplaires.Font = new Font("Segoe UI", 11);
-            numExemplaires.BackColor = Color.White;
-            numExemplaires.ForeColor = Color.FromArgb(64, 64, 64);
         }
 
         private GraphicsPath CreateRoundedPath(Rectangle rect, int radius)
@@ -208,97 +236,146 @@ namespace BibliothequeWinForm.UI
         // Charger auteurs et catégories dans les ComboBox
         private void LoadComboBoxes()
         {
-            var auteurs = auteurService.GetAllAuteurs();
-            if (auteurs.Count == 0)
+            try
             {
-                MessageBox.Show("Aucun auteur disponible. Veuillez en créer un avant d'ajouter un livre.",
-                    "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close();
-                return;
+                var auteurs = auteurService.GetAllAuteurs();
+                if (auteurs.Count == 0)
+                {
+                    MessageBox.Show("Aucun auteur disponible. Veuillez en créer un avant d'ajouter un livre.",
+                        "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                cmbAuteurs.DataSource = auteurs;
+                cmbAuteurs.DisplayMember = "NomComplet";
+                cmbAuteurs.ValueMember = "Id";
+                cmbAuteurs.SelectedIndex = 0;
+
+                var categories = categorieService.GetAllCategories();
+                if (categories.Count == 0)
+                {
+                    MessageBox.Show("Aucune catégorie disponible. Veuillez en créer une avant d'ajouter un livre.",
+                        "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                cmbCategories.DataSource = categories;
+                cmbCategories.DisplayMember = "Nom";
+                cmbCategories.ValueMember = "Id";
+                cmbCategories.SelectedIndex = 0;
             }
-
-            cmbAuteurs.DataSource = auteurs;
-            cmbAuteurs.DisplayMember = "Nom";
-            cmbAuteurs.ValueMember = "Id";
-            cmbAuteurs.SelectedIndex = 0; // sélection par défaut
-
-            var categories = categorieService.GetAllCategories();
-            if (categories.Count == 0)
+            catch (Exception ex)
             {
-                MessageBox.Show("Aucune catégorie disponible. Veuillez en créer une avant d'ajouter un livre.",
-                    "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close();
-                return;
+                MessageBox.Show($"Erreur lors du chargement des données : {ex.Message}",
+                    "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            cmbCategories.DataSource = categories;
-            cmbCategories.DisplayMember = "Nom";
-            cmbCategories.ValueMember = "Id";
-            cmbCategories.SelectedIndex = 0; // sélection par défaut
         }
 
-        // Événement du bouton Enregistrer
+        // =========================
+        // ÉVÉNEMENTS DES BOUTONS
+        // =========================
         private void BtnEnregistrer_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtTitre.Text))
             {
-                MessageBox.Show("Veuillez saisir le titre du livre.", "Validation",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Veuillez saisir le titre du livre",
+                    "Attention",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                txtTitre.Focus();
                 return;
             }
 
-            if (cmbAuteurs.SelectedValue == null || cmbCategories.SelectedValue == null)
+            if (cmbAuteurs.SelectedValue == null)
             {
-                MessageBox.Show("Veuillez sélectionner un auteur et une catégorie.", "Validation",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Veuillez sélectionner un auteur",
+                    "Attention",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                cmbAuteurs.Focus();
                 return;
             }
 
-            Livre livre = new Livre
+            if (cmbCategories.SelectedValue == null)
             {
-                Titre = txtTitre.Text,
-                AuteurId = (int)cmbAuteurs.SelectedValue,
-                CategorieId = (int)cmbCategories.SelectedValue,
-                ExemplairesDisponibles = (int)numExemplaires.Value
-            };
+                MessageBox.Show("Veuillez sélectionner une catégorie",
+                    "Attention",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                cmbCategories.Focus();
+                return;
+            }
 
-            livreService.AddLivre(livre);
-            MessageBox.Show("Livre ajouté avec succès !", "Succès",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            try
+            {
+                Livre livre = new Livre
+                {
+                    Titre = txtTitre.Text.Trim(),
+                    AuteurId = (int)cmbAuteurs.SelectedValue,
+                    CategorieId = (int)cmbCategories.SelectedValue,
+                    ExemplairesDisponibles = (int)numExemplaires.Value
+                };
 
-            // Fermer ce formulaire et revenir à FormLivres
+                livreService.AddLivre(livre);
+
+                MessageBox.Show("Livre ajouté avec succès !",
+                    "Succès",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de l'ajout du livre: {ex.Message}",
+                    "Erreur",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void BtnAnnuler_Click(object sender, EventArgs e)
+        {
             this.Close();
         }
 
-        private void FormAddLivre_Load(object sender, EventArgs e)
+        private void FormAddLivre_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // Code de chargement supplémentaire si nécessaire
-        }
-
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            this.Opacity = 1.0;
-            Timer fadeTimer = new Timer();
-            fadeTimer.Interval = 20;
-            fadeTimer.Tick += (s, ev) =>
+            // Animation de fermeture
+            if (e.CloseReason == CloseReason.UserClosing)
             {
-                if (this.Opacity > 0)
-                    this.Opacity -= 0.05;
-                else
+                e.Cancel = true;
+
+                Timer fadeTimer = new Timer();
+                fadeTimer.Interval = 20;
+                fadeTimer.Tick += (s, ev) =>
                 {
-                    fadeTimer.Stop();
-                    this.Close();
-                }
-            };
-            fadeTimer.Start();
+                    if (this.Opacity > 0.1)
+                        this.Opacity -= 0.1;
+                    else
+                    {
+                        fadeTimer.Stop();
+                        this.Hide();
+                    }
+                };
+                fadeTimer.Start();
+            }
         }
 
-        private void btnMinimize_Click(object sender, EventArgs e)
+        // =========================
+        // BOUTONS DE CONTRÔLE
+        // =========================
+        private void BtnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void BtnMinimize_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
         }
 
-        private void panelTitle_MouseDown(object sender, MouseEventArgs e)
+        private void PanelTitle_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -307,11 +384,9 @@ namespace BibliothequeWinForm.UI
             }
         }
 
-        private void btnAnnuler_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
+        // =========================
+        // IMPORT DDL POUR DÉPLACEMENT DE LA FENÊTRE
+        // =========================
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
 

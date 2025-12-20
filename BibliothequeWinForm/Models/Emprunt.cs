@@ -9,7 +9,7 @@ public class Emprunt
     public DateTime DateEmprunt { get; set; }
     public DateTime? DateRetour { get; set; }
 
-    // Navigation properties
+  
     public virtual Livre Livre { get; set; }
     public virtual Client Client { get; set; }
 }

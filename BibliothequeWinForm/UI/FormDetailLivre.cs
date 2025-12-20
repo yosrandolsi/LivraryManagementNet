@@ -8,35 +8,37 @@ namespace BibliothequeWinForm.UI
     public partial class FormDetailLivre : Form
     {
         private readonly LivreService livreService = new LivreService();
-        private readonly int livreId;
+        private int livreId;
 
-        public FormDetailLivre(int livreId)
+        public FormDetailLivre(int id)
         {
             InitializeComponent();
-            this.livreId = livreId;
-            LoadLivreDetails();
+            livreId = id;
+            LoadLivre();
         }
 
-        private void LoadLivreDetails()
+        private void LoadLivre()
         {
             Livre livre = livreService.GetLivreById(livreId);
-            if (livre != null)
+
+            if (livre == null)
             {
-                lblTitre.Text = $"Titre : {livre.Titre}";
-                lblAuteur.Text = $"Auteur : {livre.Auteur?.Nom ?? "N/A"}";
-                lblCategorie.Text = $"Catégorie : {livre.Categorie?.Nom ?? "N/A"}";
-                lblExemplaires.Text = $"Exemplaires disponibles : {livre.ExemplairesDisponibles}";
+                MessageBox.Show("Livre introuvable", "Erreur",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Close();
+                return;
             }
-            else
-            {
-                MessageBox.Show("Livre non trouvé", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                this.Close();
-            }
+
+            lblTitre.Text = livre.Titre;
+            lblAuteur.Text = $"{livre.Auteur.Nom} {livre.Auteur.Prenom}";
+            lblCategorie.Text = livre.Categorie.Nom;
+            lblExemplaires.Text = livre.ExemplairesDisponibles.ToString();
+         
         }
 
-        private void btnClose_Click(object sender, EventArgs e)
+        private void btnFermer_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
     }
 }

@@ -1,18 +1,16 @@
-﻿using System.Drawing;
-
-namespace BibliothequeWinForm.UI
+﻿namespace BibliothequeWinForm.UI
 {
     partial class FormAuteurs
     {
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.Panel panelContainer;
-        private System.Windows.Forms.Panel panelTitle;
-        private System.Windows.Forms.Button btnClose;
-        private System.Windows.Forms.Button btnMinimize;
+        private System.Windows.Forms.Panel panelTop;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Button btnAjouter;
         private System.Windows.Forms.Button btnRetour;
         private System.Windows.Forms.DataGridView dgvAuteurs;
+        private System.Windows.Forms.Button btnClose;
+        private System.Windows.Forms.Button btnMinimize;
 
         protected override void Dispose(bool disposing)
         {
@@ -21,124 +19,162 @@ namespace BibliothequeWinForm.UI
             base.Dispose(disposing);
         }
 
+        #region Windows Form Designer generated code
+
         private void InitializeComponent()
         {
             this.panelContainer = new System.Windows.Forms.Panel();
             this.dgvAuteurs = new System.Windows.Forms.DataGridView();
             this.btnAjouter = new System.Windows.Forms.Button();
+            this.panelTop = new System.Windows.Forms.Panel();
             this.btnRetour = new System.Windows.Forms.Button();
-            this.panelTitle = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
             this.btnClose = new System.Windows.Forms.Button();
             this.btnMinimize = new System.Windows.Forms.Button();
             this.panelContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAuteurs)).BeginInit();
-            this.panelTitle.SuspendLayout();
+            this.panelTop.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelContainer
             // 
+            this.panelContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(228)))), ((int)(((byte)(225)))));
             this.panelContainer.Controls.Add(this.dgvAuteurs);
             this.panelContainer.Controls.Add(this.btnAjouter);
-            this.panelContainer.Controls.Add(this.btnRetour);
-            this.panelContainer.Controls.Add(this.panelTitle);
+            this.panelContainer.Controls.Add(this.panelTop);
             this.panelContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelContainer.Location = new System.Drawing.Point(0, 0);
             this.panelContainer.Name = "panelContainer";
-            this.panelContainer.Size = new System.Drawing.Size(900, 600);
+            this.panelContainer.Padding = new System.Windows.Forms.Padding(20);
+            this.panelContainer.Size = new System.Drawing.Size(1000, 650);
             this.panelContainer.TabIndex = 0;
+            this.panelContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelContainer_Paint);
             // 
             // dgvAuteurs
             // 
-            this.dgvAuteurs.ColumnHeadersHeight = 29;
-            this.dgvAuteurs.Location = new System.Drawing.Point(20, 80);
+            this.dgvAuteurs.AllowUserToAddRows = false;
+            this.dgvAuteurs.AllowUserToDeleteRows = false;
+            this.dgvAuteurs.AllowUserToResizeRows = false;
+            this.dgvAuteurs.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(244)))), ((int)(((byte)(242)))));
+            this.dgvAuteurs.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvAuteurs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvAuteurs.Location = new System.Drawing.Point(20, 110);
             this.dgvAuteurs.Name = "dgvAuteurs";
+            this.dgvAuteurs.ReadOnly = true;
+            this.dgvAuteurs.RowHeadersVisible = false;
             this.dgvAuteurs.RowHeadersWidth = 51;
-            this.dgvAuteurs.Size = new System.Drawing.Size(860, 400);
+            this.dgvAuteurs.RowTemplate.Height = 40;
+            this.dgvAuteurs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvAuteurs.Size = new System.Drawing.Size(960, 480);
             this.dgvAuteurs.TabIndex = 0;
-            this.dgvAuteurs.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAuteurs_CellClick);
             this.dgvAuteurs.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAuteurs_CellContentClick);
             // 
             // btnAjouter
             // 
-            this.btnAjouter.Location = new System.Drawing.Point(20, 500);
+            this.btnAjouter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(144)))), ((int)(((byte)(238)))), ((int)(((byte)(144)))));
+            this.btnAjouter.FlatAppearance.BorderSize = 0;
+            this.btnAjouter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAjouter.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.btnAjouter.ForeColor = System.Drawing.Color.White;
+            this.btnAjouter.Location = new System.Drawing.Point(820, 600);
             this.btnAjouter.Name = "btnAjouter";
-            this.btnAjouter.Size = new System.Drawing.Size(180, 40);
+            this.btnAjouter.Size = new System.Drawing.Size(160, 40);
             this.btnAjouter.TabIndex = 1;
-            this.btnAjouter.Text = "➕ Ajouter Auteur";
+            this.btnAjouter.Text = "➕ Ajouter";
+            this.btnAjouter.UseVisualStyleBackColor = false;
             this.btnAjouter.Click += new System.EventHandler(this.BtnAjouter_Click);
+            // 
+            // panelTop
+            // 
+            this.panelTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(173)))), ((int)(((byte)(216)))), ((int)(((byte)(230)))));
+            this.panelTop.Controls.Add(this.btnRetour);
+            this.panelTop.Controls.Add(this.lblTitle);
+            this.panelTop.Controls.Add(this.btnClose);
+            this.panelTop.Controls.Add(this.btnMinimize);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(20, 20);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(960, 80);
+            this.panelTop.TabIndex = 3;
+            this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PanelTop_MouseDown);
             // 
             // btnRetour
             // 
-            this.btnRetour.Location = new System.Drawing.Point(220, 500);
+            this.btnRetour.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(135)))), ((int)(((byte)(206)))), ((int)(((byte)(235)))));
+            this.btnRetour.FlatAppearance.BorderSize = 0;
+            this.btnRetour.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRetour.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
+            this.btnRetour.ForeColor = System.Drawing.Color.White;
+            this.btnRetour.Location = new System.Drawing.Point(20, 20);
             this.btnRetour.Name = "btnRetour";
-            this.btnRetour.Size = new System.Drawing.Size(120, 40);
-            this.btnRetour.TabIndex = 2;
-            this.btnRetour.Text = "🔙 Retour";
+            this.btnRetour.Size = new System.Drawing.Size(50, 40);
+            this.btnRetour.TabIndex = 3;
+            this.btnRetour.Text = "←";
+            this.btnRetour.UseVisualStyleBackColor = false;
             this.btnRetour.Click += new System.EventHandler(this.BtnRetour_Click);
-            // 
-            // panelTitle
-            // 
-            this.panelTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(255)))), ((int)(((byte)(182)))), ((int)(((byte)(193)))));
-            this.panelTitle.Controls.Add(this.lblTitle);
-            this.panelTitle.Controls.Add(this.btnClose);
-            this.panelTitle.Controls.Add(this.btnMinimize);
-            this.panelTitle.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTitle.Location = new System.Drawing.Point(0, 0);
-            this.panelTitle.Name = "panelTitle";
-            this.panelTitle.Size = new System.Drawing.Size(900, 60);
-            this.panelTitle.TabIndex = 3;
-            this.panelTitle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTitle_MouseDown);
             // 
             // lblTitle
             // 
             this.lblTitle.AutoSize = true;
-            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
+            this.lblTitle.BackColor = System.Drawing.Color.Transparent;
+            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold);
             this.lblTitle.ForeColor = System.Drawing.Color.White;
-            this.lblTitle.Location = new System.Drawing.Point(10, 10);
+            this.lblTitle.Location = new System.Drawing.Point(90, 20);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(318, 37);
+            this.lblTitle.Size = new System.Drawing.Size(397, 46);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "✍️ Gestion des Auteurs";
+            this.lblTitle.Paint += new System.Windows.Forms.PaintEventHandler(this.LblTitle_Paint);
             // 
             // btnClose
             // 
+            this.btnClose.FlatAppearance.BorderSize = 0;
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClose.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
             this.btnClose.ForeColor = System.Drawing.Color.White;
-            this.btnClose.Location = new System.Drawing.Point(830, 15);
+            this.btnClose.Location = new System.Drawing.Point(910, 20);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(30, 30);
             this.btnClose.TabIndex = 1;
             this.btnClose.Text = "✕";
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            this.btnClose.UseVisualStyleBackColor = false;
+            this.btnClose.Click += new System.EventHandler(this.BtnClose_Click);
             // 
             // btnMinimize
             // 
+            this.btnMinimize.FlatAppearance.BorderSize = 0;
             this.btnMinimize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMinimize.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
             this.btnMinimize.ForeColor = System.Drawing.Color.White;
-            this.btnMinimize.Location = new System.Drawing.Point(790, 15);
+            this.btnMinimize.Location = new System.Drawing.Point(870, 20);
             this.btnMinimize.Name = "btnMinimize";
             this.btnMinimize.Size = new System.Drawing.Size(30, 30);
             this.btnMinimize.TabIndex = 2;
             this.btnMinimize.Text = "─";
-            this.btnMinimize.Click += new System.EventHandler(this.btnMinimize_Click);
+            this.btnMinimize.UseVisualStyleBackColor = false;
+            this.btnMinimize.Click += new System.EventHandler(this.BtnMinimize_Click);
             // 
             // FormAuteurs
             // 
-            this.ClientSize = new System.Drawing.Size(900, 600);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(235)))), ((int)(((byte)(230)))));
+            this.ClientSize = new System.Drawing.Size(1000, 650);
             this.Controls.Add(this.panelContainer);
+            this.DoubleBuffered = true;
+            this.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "FormAuteurs";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Load += new System.EventHandler(this.FormAuteurs_Load);
+            this.Text = "Gestion des Auteurs";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormAuteurs_FormClosing);
             this.panelContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvAuteurs)).EndInit();
-            this.panelTitle.ResumeLayout(false);
-            this.panelTitle.PerformLayout();
+            this.panelTop.ResumeLayout(false);
+            this.panelTop.PerformLayout();
             this.ResumeLayout(false);
 
         }
+
+        #endregion
     }
 }

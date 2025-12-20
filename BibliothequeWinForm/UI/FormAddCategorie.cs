@@ -14,44 +14,24 @@ namespace BibliothequeWinForm.UI
         public FormAddCategorie()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.Load += FormAddCategorie_Load;
+        }
+
+        private void FormAddCategorie_Load(object sender, EventArgs e)
+        {
+            // Appliquer les coins arrondis
+            ApplyRoundedCorners(panelContainer, 25);
+            ApplyRoundedCorners(btnEnregistrer, 15);
+            ApplyRoundedCorners(btnAnnuler, 15);
+            ApplyRoundedCorners(panelTop, 15);
+            ApplyRoundedCorners(txtNom, 10);
+
+            // Appliquer les effets visuels
             SetupVisualEffects();
-            ApplyRoundedCorners();
         }
 
-        private void SetupVisualEffects()
-        {
-            // Style du formulaire
-            this.BackColor = Color.FromArgb(255, 245, 235, 230);
-
-            // Arrondir les bords du formulaire
-            ApplyRoundedFormCorners(30);
-
-            // Appliquer les effets aux boutons
-            SetupButtonEffects();
-
-            // Appliquer les effets aux champs
-            SetupControlEffects();
-        }
-
-        private void ApplyRoundedFormCorners(int radius)
-        {
-            GraphicsPath path = new GraphicsPath();
-            path.AddArc(0, 0, radius, radius, 180, 90);
-            path.AddArc(this.Width - radius, 0, radius, radius, 270, 90);
-            path.AddArc(this.Width - radius, this.Height - radius, radius, radius, 0, 90);
-            path.AddArc(0, this.Height - radius, radius, radius, 90, 90);
-            path.CloseAllFigures();
-            this.Region = new Region(path);
-        }
-
-        private void ApplyRoundedCorners()
-        {
-            ApplyRoundedControl(txtNom, 15);
-            ApplyRoundedControl(btnEnregistrer, 20);
-            ApplyRoundedControl(btnAnnuler, 20);
-        }
-
-        private void ApplyRoundedControl(Control control, int radius)
+        private void ApplyRoundedCorners(Control control, int radius)
         {
             if (control == null) return;
 
@@ -61,50 +41,82 @@ namespace BibliothequeWinForm.UI
             path.AddArc(control.Width - radius, control.Height - radius, radius, radius, 0, 90);
             path.AddArc(0, control.Height - radius, radius, radius, 90, 90);
             path.CloseAllFigures();
-
-            if (control is TextBox)
-            {
-                control.Region = new Region(path);
-            }
+            control.Region = new Region(path);
         }
 
-        private void SetupButtonEffects()
+        private void SetupVisualEffects()
         {
-            Button[] buttons = { btnEnregistrer, btnAnnuler };
-
-            foreach (Button btn in buttons)
+            // Fond dégradé du conteneur principal
+            panelContainer.Paint += (sender, e) =>
             {
-                btn.FlatAppearance.BorderSize = 0;
-                btn.FlatStyle = FlatStyle.Flat;
-                btn.Font = new Font("Segoe UI", 11, FontStyle.Bold);
-                btn.ForeColor = Color.White;
-
-                if (btn == btnEnregistrer)
+                using (LinearGradientBrush brush = new LinearGradientBrush(
+                    panelContainer.ClientRectangle,
+                    Color.FromArgb(255, 239, 228, 225),  // Couleur pastel claire
+                    Color.FromArgb(255, 245, 235, 230),  // Couleur pastel plus claire
+                    45F))
                 {
-                    btn.BackColor = Color.FromArgb(200, 144, 238, 144); // pastel vert
-                }
-                else
-                {
-                    btn.BackColor = Color.FromArgb(200, 255, 182, 193); // pastel rose
+                    e.Graphics.FillRectangle(brush, panelContainer.ClientRectangle);
                 }
 
-                btn.Paint += (sender, e) =>
+                // Bordure subtile
+                using (Pen borderPen = new Pen(Color.FromArgb(180, 210, 210, 210), 1))
                 {
-                    Button button = (Button)sender;
-                    if (button.Enabled)
+                    Rectangle borderRect = new Rectangle(0, 0, panelContainer.Width - 1, panelContainer.Height - 1);
+                    e.Graphics.DrawRectangle(borderPen, borderRect);
+                }
+            };
+
+            // Effets sur les boutons
+            AddButtonEffects(btnEnregistrer, btnAnnuler);
+
+            // Style de l'en-tête (vert pastel)
+            panelTop.Paint += (sender, e) =>
+            {
+                using (LinearGradientBrush brush = new LinearGradientBrush(
+                    panelTop.ClientRectangle,
+                    Color.FromArgb(255, 144, 238, 144),  // Vert clair pastel
+                    Color.FromArgb(255, 152, 251, 152),  // Vert pastel
+                    90F))
+                {
+                    e.Graphics.FillRectangle(brush, panelTop.ClientRectangle);
+                }
+            };
+
+            // Style de la zone de texte
+            txtNom.BackColor = Color.White;
+            txtNom.BorderStyle = BorderStyle.None;
+            txtNom.Font = new Font("Segoe UI", 11F);
+            txtNom.Paint += (sender, e) =>
+            {
+                using (Pen borderPen = new Pen(Color.FromArgb(200, 144, 238, 144), 2))
+                {
+                    Rectangle rect = new Rectangle(0, 0, txtNom.Width - 1, txtNom.Height - 1);
+                    e.Graphics.DrawRectangle(borderPen, rect);
+                }
+            };
+        }
+
+        private void AddButtonEffects(params Button[] buttons)
+        {
+            foreach (Button button in buttons)
+            {
+                button.Paint += (sender, e) =>
+                {
+                    Button btn = (Button)sender;
+                    if (btn.Enabled)
                     {
-                        using (GraphicsPath path = CreateRoundedPath(button.ClientRectangle, 20))
+                        using (GraphicsPath path = CreateRoundedPath(btn.ClientRectangle, 15))
                         {
                             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
                             // Ombre
-                            using (Pen shadowPen = new Pen(Color.FromArgb(40, 0, 0, 0), 3))
+                            using (Pen shadowPen = new Pen(Color.FromArgb(40, 0, 0, 0), 2))
                             {
                                 e.Graphics.DrawPath(shadowPen, path);
                             }
 
                             // Surbrillance
-                            RectangleF highlightRect = new RectangleF(5, 5, button.Width - 10, 15);
+                            RectangleF highlightRect = new RectangleF(3, 3, btn.Width - 6, 12);
                             using (LinearGradientBrush highlightBrush = new LinearGradientBrush(
                                 highlightRect,
                                 Color.FromArgb(60, 255, 255, 255),
@@ -117,58 +129,37 @@ namespace BibliothequeWinForm.UI
                     }
                 };
 
-                btn.MouseEnter += (sender, e) =>
+                // Effets hover
+                button.MouseEnter += (s, e) =>
                 {
-                    Button button = (Button)sender;
                     button.BackColor = Color.FromArgb(220, button.BackColor.R, button.BackColor.G, button.BackColor.B);
                 };
-
-                btn.MouseLeave += (sender, e) =>
+                button.MouseLeave += (s, e) =>
                 {
-                    Button button = (Button)sender;
-                    if (button == btnEnregistrer)
-                    {
-                        button.BackColor = Color.FromArgb(200, 144, 238, 144);
-                    }
-                    else
-                    {
-                        button.BackColor = Color.FromArgb(200, 255, 182, 193);
-                    }
+                    if (button.Name == "btnEnregistrer")
+                        button.BackColor = Color.FromArgb(200, 144, 238, 144); // Vert pastel
+                    else if (button.Name == "btnAnnuler")
+                        button.BackColor = Color.FromArgb(200, 255, 182, 193); // Rose pastel
                 };
 
-                btn.Click += (sender, e) =>
+                // Effet click
+                button.Click += (s, e) =>
                 {
-                    Button button = (Button)sender;
-                    Color originalColor = button.BackColor;
-                    button.BackColor = Color.FromArgb(180, button.BackColor.R, button.BackColor.G, button.BackColor.B);
+                    Button btn = (Button)s;
+                    Color originalColor = btn.BackColor;
+                    btn.BackColor = Color.FromArgb(180, btn.BackColor.R, btn.BackColor.G, btn.BackColor.B);
 
                     Timer timer = new Timer();
                     timer.Interval = 150;
-                    timer.Tick += (s, ev) =>
+                    timer.Tick += (timerS, timerE) =>
                     {
-                        button.BackColor = originalColor;
+                        btn.BackColor = originalColor;
                         timer.Stop();
                         timer.Dispose();
                     };
                     timer.Start();
                 };
             }
-        }
-
-        private void SetupControlEffects()
-        {
-            // Style des labels
-            Label[] labels = { lblNom };
-            foreach (Label lbl in labels)
-            {
-                lbl.Font = new Font("Segoe UI Semibold", 11);
-                lbl.ForeColor = Color.FromArgb(100, 80, 80, 80);
-            }
-
-            // Style des TextBox
-            txtNom.Font = new Font("Segoe UI", 11);
-            txtNom.BackColor = Color.White;
-            txtNom.ForeColor = Color.FromArgb(64, 64, 64);
         }
 
         private GraphicsPath CreateRoundedPath(Rectangle rect, int radius)
@@ -182,6 +173,9 @@ namespace BibliothequeWinForm.UI
             return path;
         }
 
+        // =========================
+        // ÉVÉNEMENTS DES BOUTONS
+        // =========================
         private void BtnEnregistrer_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtNom.Text))
@@ -190,22 +184,33 @@ namespace BibliothequeWinForm.UI
                     "Attention",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
+                txtNom.Focus();
                 return;
             }
 
-            Categorie categorie = new Categorie
+            try
             {
-                Nom = txtNom.Text.Trim()
-            };
+                Categorie categorie = new Categorie
+                {
+                    Nom = txtNom.Text.Trim()
+                };
 
-            categorieService.AddCategorie(categorie);
+                categorieService.AddCategorie(categorie);
 
-            MessageBox.Show("Catégorie ajoutée avec succès",
-                "Succès",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
+                MessageBox.Show("Catégorie ajoutée avec succès !",
+                    "Succès",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
 
-            this.Close();
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de l'ajout de la catégorie: {ex.Message}",
+                    "Erreur",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private void BtnAnnuler_Click(object sender, EventArgs e)
@@ -213,35 +218,43 @@ namespace BibliothequeWinForm.UI
             this.Close();
         }
 
-        private void FormAddCategorie_Load(object sender, EventArgs e)
+        private void FormAddCategorie_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // Code de chargement supplémentaire si nécessaire
-        }
-
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            this.Opacity = 1.0;
-            Timer fadeTimer = new Timer();
-            fadeTimer.Interval = 20;
-            fadeTimer.Tick += (s, ev) =>
+            // Animation de fermeture
+            if (e.CloseReason == CloseReason.UserClosing)
             {
-                if (this.Opacity > 0)
-                    this.Opacity -= 0.05;
-                else
+                e.Cancel = true;
+
+                Timer fadeTimer = new Timer();
+                fadeTimer.Interval = 20;
+                fadeTimer.Tick += (s, ev) =>
                 {
-                    fadeTimer.Stop();
-                    this.Close();
-                }
-            };
-            fadeTimer.Start();
+                    if (this.Opacity > 0.1)
+                        this.Opacity -= 0.1;
+                    else
+                    {
+                        fadeTimer.Stop();
+                        this.Hide();
+                    }
+                };
+                fadeTimer.Start();
+            }
         }
 
-        private void btnMinimize_Click(object sender, EventArgs e)
+        // =========================
+        // BOUTONS DE CONTRÔLE
+        // =========================
+        private void BtnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void BtnMinimize_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
         }
 
-        private void panelTitle_MouseDown(object sender, MouseEventArgs e)
+        private void PanelTop_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -250,15 +263,28 @@ namespace BibliothequeWinForm.UI
             }
         }
 
+        // =========================
+        // UTILS
+        // =========================
+        private void LblTitle_Paint(object sender, PaintEventArgs e)
+        {
+            // Effet de texte avec ombre
+            ControlPaint.DrawBorder(e.Graphics, lblTitle.ClientRectangle,
+                Color.Transparent, ButtonBorderStyle.None);
+        }
+
+        private void PanelContainer_Paint(object sender, PaintEventArgs e)
+        {
+            // Déjà géré dans SetupVisualEffects
+        }
+
+        // =========================
+        // IMPORT DDL POUR DÉPLACEMENT DE LA FENÊTRE
+        // =========================
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern bool ReleaseCapture();
-
-        private void panelContainer_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
     }
 }
